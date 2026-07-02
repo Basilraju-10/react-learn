@@ -1,28 +1,26 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Card from "./components/Card"
+import Post from "./components/Post";
 
 
  export default function App() {
-  const numberRef = useRef();
-  const [fact,setFact] = useState();
-  const [loading,setLoading] = useState(false);
+  const [loading,setLoading]= useState(true);
+  const [posts, setPosts] = useState([]);
 
-  const getFact = async() => {
-    setLoading(true)
-    const number = numberRef.current.value
-const response = await fetch('https://catfact.ninja/fact')
-    const text = await response.text()
-    setLoading(false)
-    setFact(text)
+  const loadPosts = async () =>{
+    const res = await fetch("https://jsonplaceholder.typicode.com/posts");
+    const data = await res.json();
+    setPosts(data);
+    setLoading(false);
   }
-  if(loading){
-    return <div>Loading...</div>
-  }
+
+  useEffect(()=>{
+  loadPosts();
+  },[]);
+  if(loading)return <h1>Loading...</h1>;
   return (
     <div>
-      <input ref={numberRef} type="number" placeholder="Enter Number"/>
-      <button onClick={getFact}>Get Fact</button>
-      <p>{fact}</p>
+      {posts.map((p)=> <Post key = {p.id} title={p.title} body={p.body}/>)}
     </div>
   )
 }
