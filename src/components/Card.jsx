@@ -1,7 +1,13 @@
-import { card } from "./Card.module.css"; 
-export default function Card(props){
-  return<div className={card}>
-    <h1>{props.title}</h1>
-    <p>{props.content}</p>
-  </div>
+
+import useCount from "../hooks/useCount"
+
+export default function card() {
+  const {count}= useCount();
+  return(
+    <div>
+      <h1>My Card</h1>
+      <hr />
+      <p>current count is:{count} </p>
+    </div>
+  )
 }
